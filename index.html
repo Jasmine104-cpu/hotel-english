@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel English – Tiếng Anh Khách sạn & Nhà hàng</title>
+<meta name="description" content="Tự học tiếng Anh ngành Khách sạn – Nhà hàng: từ vựng theo chủ đề, ngữ pháp A1–C1 và phòng luyện nói với AI.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230F766E'/><text x='50' y='66' font-family='sans-serif' font-size='50' text-anchor='middle'>🛎</text></svg>">
+
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('he_theme') || 'system';
+    var dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    if (dark) document.documentElement.classList.add('dark');
+  }catch(e){}
+})();
+</script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: { extend: { colors: { brand: { DEFAULT: '#0F766E', dark: '#115E59', gold: '#D97706' } } } }
+  }
+</script>
+
+<style>
+  body{ -webkit-tap-highlight-color:transparent; }
+  .hero-bg{ background:linear-gradient(135deg,#0F766E 0%,#134E4A 55%,#1E293B 100%); }
+  .chat-scroll{ scroll-behavior:smooth; }
+  .typing span{ display:inline-block; width:6px; height:6px; margin:0 1px; border-radius:9999px; background:currentColor; animation:blink 1.2s infinite; }
+  .typing span:nth-child(2){ animation-delay:.2s } .typing span:nth-child(3){ animation-delay:.4s }
+  @keyframes blink{ 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+  .mic-on{ animation:pulse 1.2s infinite; }
+  @keyframes pulse{ 0%{box-shadow:0 0 0 0 rgba(239,68,68,.6)} 70%{box-shadow:0 0 0 12px rgba(239,68,68,0)} 100%{box-shadow:0 0 0 0 rgba(239,68,68,0)} }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+
+<header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-slate-200 dark:border-slate-700">
+  <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+    <a href="#/" class="flex items-center gap-2 font-extrabold text-brand dark:text-teal-400 shrink-0">
+      <span class="text-2xl">🛎️</span><span class="hidden sm:inline">Hotel English</span>
+    </a>
+    <nav id="nav" class="flex items-center gap-1 text-sm font-medium overflow-x-auto">
+      <a href="#/" data-nav="home" class="px-3 py-2 rounded-lg whitespace-nowrap">Trang chủ</a>
+      <a href="#/vocab" data-nav="vocab" class="px-3 py-2 rounded-lg whitespace-nowrap">Từ vựng</a>
+      <a href="#/grammar" data-nav="grammar" class="px-3 py-2 rounded-lg whitespace-nowrap">Ngữ pháp</a>
+      <a href="#/roleplay" data-nav="roleplay" class="px-3 py-2 rounded-lg whitespace-nowrap">Luyện nói AI</a>
+    </nav>
+    <button id="themeBtn" class="shrink-0 w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800" title="Đổi giao diện sáng/tối">🌓</button>
+  </div>
+</header>
+
+<main id="app" class="flex-1 w-full max-w-6xl mx-auto px-4 py-6"></main>
+
+<footer class="text-center text-xs text-slate-500 dark:text-slate-400 py-6 border-t border-slate-200 dark:border-slate-700">
+  Hotel English · Tự học tiếng Anh Khách sạn – Nhà hàng · A2 → C1
+</footer>
+
+<!-- Modal cài đặt AI -->
+<div id="aiModal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+  <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md p-6 shadow-xl">
+    <h3 class="text-lg font-bold mb-1">Kết nối AI (Claude)</h3>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Nhập API key của Anthropic để AI đóng vai khách linh hoạt và chấm lỗi chi tiết. Key chỉ lưu trên trình duyệt của bạn. Không có key, phòng luyện vẫn chạy ở <b>chế độ kịch bản</b>.</p>
+    <label class="block text-sm font-medium mb-1" for="aiKey">API key</label>
+    <input id="aiKey" type="password" autocomplete="off" placeholder="sk-ant-..." class="w-full mb-3 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
+    <label class="block text-sm font-medium mb-1" for="aiModel">Model</label>
+    <select id="aiModel" class="w-full mb-4 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
+      <option value="claude-opus-5-5">Claude Opus 5.5 (mặc định)</option>
+      <option value="claude-sonnet-5-5">Claude Sonnet 5.5</option>
+      <option value="claude-haiku-5-5">Claude Haiku 5.5 (rẻ nhất)</option>
+    </select>
+    <div class="flex justify-between gap-2">
+      <button id="aiClear" class="px-4 py-2 rounded-lg text-sm text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/30">Xóa key</button>
+      <div class="flex gap-2">
+        <button id="aiCancel" class="px-4 py-2 rounded-lg text-sm hover:bg-slate-100 dark:hover:bg-slate-700">Đóng</button>
+        <button id="aiSave" class="px-4 py-2 rounded-lg text-sm bg-brand text-white hover:bg-brand-dark">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="data-vocab.js"></script>
+<script src="data-grammar.js"></script>
+<script src="data-roleplay.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
